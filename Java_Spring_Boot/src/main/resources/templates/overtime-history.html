@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout.html :: html_head}" />
+
+<body>
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
+	<main>
+		<h1 class="display-5">Overtime Claim History
+			<span th:if="${showAll}"> (All)</span>
+			<span th:unless="${showAll}"> (Current Year)</span>
+		</h1>
+		<div class="pt-4">
+			<div th:replace="~{fragments/layout.html :: pagination-bar}" />
+
+			<div th:if="${#lists.isEmpty(overtimeHistory)}">
+				<p class="text-center">You have not applied for any overtime claims.</p>
+			</div>
+			
+			<div th:if="${not #lists.isEmpty(overtimeHistory)}">
+				<table class="table table-sm table-bordered border-light" width="100%">
+					<thead class="table-light border-light-subtle">
+						<tr>
+							<td>Start Time</td>
+							<td>End Time</td>
+							<td>Duration</td>
+							<td>Eligible Claim</td>
+							<td>Status</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tr th:each="overtime : ${overtimeHistory}">
+						<td>
+							<span th:text="${#temporals.format(overtime.startTime, 'yyyy-MM-dd HH:mm')}"></span>
+						</td>
+						<td>
+							<span th:text="${#temporals.format(overtime.endTime, 'yyyy-MM-dd HH:mm')}"></span>
+						</td>
+						<td>
+							<span th:text="${overtime.getDuration() + ' hours'}"></span>
+						</td>
+						<td>
+							<span th:text="${overtime.getClaimableCompensation() + ' days'}"></span>
+						</td>
+						<td class="fw-normal" th:text="${overtime.status}"
+							th:classappend="${ (overtime.status.toString() == 'APPLIED' || overtime.status.toString() == 'UPDATED') ? 'text-primary' : 
+											   (overtime.status.toString() == 'APPROVED') ? 'text-success' :
+											   (overtime.status.toString() == 'REJECTED') ? 'text-danger' : 'text-secondary'}"></td>
+						<td>
+							<span><a class="btn btn-sm btn-outline-primary"
+									th:href="@{~/staff/overtime/details/}+${overtime.id}">View</a></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="col-12">
+				<p style="font-size:0.9rem; align-self:center;">Total Entries: <span th:text="${totalItems}"></span></p>
+			</div>
+			<div class="d-flex flex-row-reverse">
+				<span class="ms-3" th:unless="${showAll}"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/overtime/history/all}">View All</a></span>
+				<span class="ms-3"><a class="btn btn-sm btn-outline-dark text-decoration-none" th:href="@{~/staff/overview}">Back to Overview</a></span>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

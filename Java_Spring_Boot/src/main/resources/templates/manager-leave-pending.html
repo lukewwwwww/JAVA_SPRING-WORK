@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout.html :: html_head}" />
+
+<body>
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Manager'"/>
+	<main>
+		<h1 class="display-5">Pending Leaves</h1>
+		<div class="pt-4">
+			
+			<div th:if="${leavePending.isEmpty()}">
+				<p class="text-center">There are no pending leaves.</p>
+			</div>
+			
+			<div th:if="${not leavePending.isEmpty()}">
+				<div class="pt-4" th:each="entry: ${leavePending}">
+					<th:block th:with="employeeName=${entry.value.get(0).employee.name}, leaves=${entry.value}">
+						<h5 th:text="${employeeName}"></h5>
+						<table class="table table-sm table-bordered border-light" width="100%">
+							<thead class="table-light border-light-subtle">
+								<tr>
+									<td>Leave Type</td>
+									<td>Start Date</td>
+									<td>End Date</td>
+									<td>Duration</td>
+									<td>Action</td>
+								</tr>
+							</thead>
+							<tr th:each="leave : ${leaves}">
+								<td th:text="${leave.leaveType.type}"></td>
+								<td>
+									<span th:text="${leave.startDate}"></span>
+									<span th:text="${leave.startDaySection}"></span>
+								</td>
+								<td>
+									<span th:text="${leave.endDate}"></span>
+									<span th:text="${leave.endDaySection}"></span>
+								</td>
+								<td th:text="${leaveService.calculateDeductibleDaysInLeave(leave)} + ${' days'}"></td>
+								<td>
+									<span><a class="btn btn-sm btn-outline-primary"
+											th:href="@{~/manager/staff/}+${leave.employee.id}+${'/leave/'}+${leave.id}">View</a></span>
+								</td>
+							</tr>
+						</table>
+						<div class="d-flex flex-row-reverse">
+							<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/manager/overview}">Back to Overview</a></span>
+						</div>
+					</th:block>
+				</div>
+			</div>
+			
+		</div>
+	</main>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout.html :: html_head}" />
+
+<body>
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
+	<main>
+		<h1 class="display-5">Apply for Leave</h1>
+		<div th:replace="~{fragments/layout.html :: leave_balance}" />
+		<form class="row g-4 pt-4" action="#" th:action="@{'/staff/leave/apply'}" th:object="${leave}" method="post">
+			<div class="form-group col-12">
+				<label for="leaveType" class="form-label">Leave Type</label>
+				<select class="form-select" name="leaveTypeString">
+					<option th:each="type : ${leaveTypes}" th:value="${type}" th:text="${type}"></option>
+				</select>
+			</div>
+			<div class="form-group col-md-4 pe-2">
+				<label for="startDate" class="form-label">Start Date</label>
+				<input type="date" class="form-control" name="startDate" required/>
+				<div class="form-text text-danger ps-1" th:if"${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>			
+			</div>
+			<div class="form-group col-md-2">
+				<label for="startDaySection" class="form-label">&nbsp;</label>
+				<select class="form-select" name="startDaySection">
+					<option th:each="daySection : ${T(sg.edu.nus.iss.lms.model.Leave.DaySection).values()}" th:value="${daySection}" th:text="${daySection}"></option>
+				</select>
+			</div>
+			<div class="form-group col-md-4">
+				<label for="endDate" class="form-label">End Date</label>
+				<input type="date" class="form-control" name="endDate" required/>
+				<div class="form-text text-danger ps-1" th:if"${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></div>
+			</div>
+			<div class="form-group col-md-2">
+				<label for="endDaySection" class="form-label">&nbsp;</label>
+				<select class="form-select" name="endDaySection">
+					<option th:each="daySection : ${T(sg.edu.nus.iss.lms.model.Leave.DaySection).values()}" th:value="${daySection}" th:text="${daySection}"></option>
+				</select>
+			</div>
+			<div class="form-group col-12">
+    			<label for="destination" class="form-label">Destination</label>
+    			<select class="form-select" name="destination">
+					<option th:value="Local" th:text="Local"></option>
+					<option th:value="Overseas" th:text="Overseas"></option>
+				</select>
+  			</div>
+			<div class="form-group col-12">
+    			<label for="reason" class="form-label">Reason</label>
+    			<textarea class="form-control" name="reason" placeholder="State reasons for taking leave" required></textarea>
+  			</div>
+  			<div class="form-group col-12">
+    			<label for="dissemination" class="form-label">Work Dissemination (if Any)</label>
+    			<textarea class="form-control" name="dissemination" placeholder="State work dissemination details (e.g. outstanding tasks)"></textarea>
+  			</div>
+  			<div class="form-group col-12">
+    			<label for="contact" class="form-label">Personal Contact Details (if Overseas)</label>
+    			<textarea class="form-control" name="contact" placeholder="State contact details (e.g. overseas phone number, overseas address)"></textarea>
+    			<div class="form-text text-danger ps-1" th:if"${#fields.hasErrors('contact')}" th:errors="*{contact}"></div>
+  			</div>
+  			<div class="d-flex flex-row-reverse">
+				<button class="btn btn-primary ms-3" type="submit">Submit</button>
+				<span class="ms-3"><a class="btn btn-outline-dark text-decoration-none" th:href="@{~/staff/overview}">Back to Overview</a></span>
+			</div>
+		</form>
+		<div class="row pt-4">
+			<div th:if="${errorMsg != null}" th:text="${errorMsg}" class="alert alert-warning"></div>
+		</div>
+	</main>
+</body>
+</html>

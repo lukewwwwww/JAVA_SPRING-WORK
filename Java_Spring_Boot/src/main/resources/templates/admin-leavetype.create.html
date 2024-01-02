@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Leave Type</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Create Leave Type</h2>
+    <form th:action="@{/leavetype}" th:object="${leaveType}" method="post">
+        <div class="form-group">
+            <label for="type">Type:</label>
+            <input type="text" id="type" th:field="*{type}" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+</body>
+</html>

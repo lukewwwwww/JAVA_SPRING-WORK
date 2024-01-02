@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout.html :: html_head}" />
+
+<body>
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Manager'"/>
+	<main>
+		<h1 class="display-5">Manager Overview</h1>
+		<div>
+			<div class="pt-4">
+				<h5>Pending Leaves <span th:if="${#lists.size(leavePending) > 5}">(First 5)</span></h5>
+				<div th:if="${#lists.isEmpty(leavePending)}">
+					<p class="text-center">There are no pending leaves.</p>
+				</div>
+				<div th:if="${not #lists.isEmpty(leavePending)}">
+					<table class="table table-sm table-bordered border-light" width="100%">
+						<thead class="table-light border-light-subtle">
+							<tr>
+								<td>Employee Name</td>
+								<td>Leave Type</td>
+								<td>Start Date</td>
+								<td>End Date</td>
+								<td>Duration</td>
+								<td>Actions</td>
+							</tr>
+						</thead>
+						<tr th:each="leave , iStat : ${leavePending}" th:if="${iStat.count <= 5}">
+							<td th:text="${leave.employee.name}"></td>
+							<td th:text="${leave.leaveType.type}"></td>
+							<td>
+								<span th:text="${leave.startDate}"></span>
+								<span th:text="${leave.startDaySection}"></span>
+							</td>
+							<td>
+								<span th:text="${leave.endDate}"></span>
+								<span th:text="${leave.endDaySection}"></span>
+							</td>
+							<td th:text="${leaveService.calculateDeductibleDaysInLeave(leave)} + ${' days'}"></td>
+							<td>
+								<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${leave.employee.id}+${'/leave/'}+${leave.id}">View</a></span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="d-flex flex-row-reverse">
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/manager/leave/pending}">View All Pending Leaves</a></span>
+				<span class="ms-3"><a class="btn btn-sm btn-outline-dark text-decoration-none" th:href="@{~/manager/staff}">View Subordinate List</a></span>
+			</div>
+		</div>
+		<div class="pt-4"><hr></div>
+		<div>
+			<div class="pt-4">
+				<h5>Pending Overtime Claims <span th:if="${#lists.size(overtimePending) > 5}">(First 5)</span></h5>
+				<div th:if="${#lists.isEmpty(overtimePending)}">
+					<p class="text-center">There are no pending overtime claims.</p>
+				</div>
+				<div th:if="${not #lists.isEmpty(overtimePending)}">
+					<table class="table table-sm table-bordered border-light" width="100%">
+						<thead class="table-light border-light-subtle">
+							<tr>
+								<td>Employee Name</td>
+								<td>Start Time</td>
+								<td>End Time</td>
+								<td>Duration</td>
+								<td>Eligible Claim</td>
+								<td>Action</td>
+							</tr>
+						</thead>
+						<tr th:each="overtime , iStat : ${overtimePending}" th:if="${iStat.count <= 5}">
+							<td th:text="${overtime.employee.name}"></td>
+							<td>
+								<span th:text="${#temporals.format(overtime.startTime, 'yyyy-MM-dd HH:mm')}"></span>
+							</td>
+							<td>
+								<span th:text="${#temporals.format(overtime.endTime, 'yyyy-MM-dd HH:mm')}"></span>
+							</td>
+							<td>
+								<span th:text="${overtime.getDuration() + ' hours'}"></span>
+							</td>
+							<td>
+								<span th:text="${overtime.getClaimableCompensation() + ' days'}"></span>
+							</td>
+							<td>
+								<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${overtime.employee.id}+${'/overtime/'}+${overtime.id}">View</a></span>
+							</td>
+						</tr>									
+					</table>
+				</div>
+			</div>
+			<div class="d-flex flex-row-reverse">
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/manager/overtime/pending}">View All Pending Overtime Claims</a></span>
+				<span class="ms-3"><a class="btn btn-sm btn-outline-dark text-decoration-none" th:href="@{~/manager/staff}">View Subordinate List</a></span>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

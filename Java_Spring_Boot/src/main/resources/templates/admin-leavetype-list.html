@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Leave Types</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Leave Types</h2>
+    <a th:href="@{/leavetype/create}" class="btn btn-primary mb-2">New Leave Type</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="leaveType : ${leaveTypeList}">
+                <td th:text="${leaveType.id}">ID</td>
+                <td th:text="${leaveType.type}">Type</td>
+                <td>
+                    <a th:href="@{/leavetype/edit/{id}(id=${leaveType.id})}" class="btn btn-sm btn-warning">Edit</a>
+                    <a th:href="@{/leavetype/delete/{id}(id=${leaveType.id})}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+html {
+	font-size: 0.9rem;
+}
+
+html, body {
+	height: 100%;
+	background-color: #fcfcfd;
+}
+
+.logo-font {
+	font-family: 'Lato', sans-serif;
+	font-weight: 900;
+	color: rgba(255, 255, 255, 0.9);
+}
+
+/* Off Canvas Menu */
+.offcanvas {
+	max-width: 350px !important;
+}
+
+.offcanvas-footer {
+    padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
+}
+
+.offcanvas-subheader {
+	padding: 0 var(--bs-offcanvas-padding-x);
+}
+
+.offcanvas-image-container {
+	aspect-ratio : 1 / 1;
+	width: 33%;
+	border-radius: 50%;
+	background-color: white;
+	overflow: hidden;
+}
+
+.offcanvas-profile-image {
+	width: 100%;
+}
+
+main {
+	padding: 3rem 16% !important;
+}
+
+#calendar-main {
+	padding: 3rem 23% !important;
+}
+
+/* Login Page */
+#body-login form div {
+    padding: .2em 0;
+}
+
+#body-login form button, #body-login #errorMsg {
+    margin-top: 1em;
+}
+
+#body-login #buttonContainer {
+    display: flex;
+    justify-content: end;
+}
+
+/* Forms */
+label {
+	font-weight: 350;
+}
+
+table {
+	table-layout: fixed;
+	font-weight: 350;
+	text-align: center;
+}
+
+table thead {
+	font-weight: 400;
+}
+
+table .btn {
+	--bs-btn-padding-y: .25rem;
+	--bs-btn-padding-x: .5rem;
+	--bs-btn-font-size: .75rem;
+}
+
+/* Calendar */
+#calendar * {
+	text-decoration: none;
+}
+
+#calendar .fc-view * {
+	color: black;
+}

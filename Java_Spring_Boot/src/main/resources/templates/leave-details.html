@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout.html :: html_head}" />
+
+<body>
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
+	<main>
+		<h1 class="display-5">Leave Details</h1>
+		<form method="post" class="row g-4 pt-4">
+			<div class="form-group col-12">
+				<label for="leaveStatus" class="form-label">Leave Status</label>
+				<input type="text" name="leaveStatus" class="form-control text-primary fw-semibold" th:value="${leave.status}" disabled>
+			</div>
+			<div class="form-group col-12">
+				<label for="leaveType" class="form-label">Leave Type</label>
+				<input type="text" name="leaveType" class="form-control" th:value="${leave.leaveType.type}" disabled>
+			</div>
+			<div class="form-group col-md-4 pe-2">
+				<label for="startDate" class="form-label">Start Date</label>
+				<input type="text" name="startDate" class="form-control" th:value="${leave.startDate}" disabled>				
+			</div>
+			<div class="form-group col-md-2">
+				<label for="startDaySection" class="form-label">&nbsp;</label>
+				<input type="text" name="startDaySection" class="form-control" th:value="${leave.startDaySection}" disabled>
+			</div>
+			<div class="form-group col-md-4 pe-2">
+				<label for="endDate" class="form-label">End Date</label>
+				<input type="text" name="endDate" class="form-control" th:value="${leave.endDate}" disabled>
+			</div>
+			<div class="form-group col-md-2">
+				<label for="endDaySection" class="form-label">&nbsp;</label>
+				<input type="text" name="endDaySection" class="form-control" th:value="${leave.endDaySection}" disabled>
+			</div>
+			<div class="form-group col-12">
+    			<label for="destination" class="form-label">Destination</label>
+    			<input type="text" name="destination" class="form-control" th:value="${leave.destination}" disabled>
+  			</div>
+			<div class="form-group col-12">
+    			<label for="reason" class="form-label">Reason</label>
+    			<textarea name="reason" class="form-control" th:text="${leave.reason}" disabled></textarea>
+  			</div>
+  			<div class="form-group col-12">
+    			<label for="dissemination" class="form-label">Work Dissemination</label>
+    			<textarea name="dissemination" class="form-control" th:text="${leave.dissemination}" disabled></textarea>
+  			</div>
+  			<div class="form-group col-12">
+    			<label for="contact" class="form-label">Personal Contact Details</label>
+    			<textarea name="contact" class="form-control" th:text="${leave.contact}" disabled></textarea>
+  			</div>
+  			<div class="form-group col-12" th:if="${#strings.equals(leave.status,'APPROVED') or #strings.equals(leave.status,'REJECTED')}")>
+    			<label for="contact" class="form-label">Manager Comment</label>
+    			<textarea name="contact" class="form-control" th:text="${leave.managerComment}" disabled></textarea>
+  			</div>
+  			<div class="d-flex flex-row-reverse">
+				<span class="ms-3" th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}" >
+					<a class="btn btn-dark text-decoration-none" th:href="@{~/staff/leave/edit/}+${leave.id}">Edit</a></span>
+				<button class="btn btn-danger ms-3" type="submit"
+					th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}"
+					th:formaction="@{~/staff/leave/delete/}+${leave.id}"
+					onclick="return confirm('Are you sure?')">Delete Leave</button>
+				<button class="btn btn-danger ms-3" type="submit"
+					th:if="${#strings.equals(leave.status,'APPROVED')}"
+					th:formaction="@{~/staff/leave/cancel/}+${leave.id}"
+					onclick="return confirm('Are you sure?')">Cancel Leave</button>
+				<span class="ms-3"><a class="btn btn-outline-dark text-decoration-none" th:href="@{~/staff/overview}">Back to Overview</a></span>
+			</div>
+		</form>
+	</main>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout.html :: html_head}" />
+
+<body>
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Manager'"/>
+	<main>
+		<h1 class="display-5">Overtime Claim Details</h1>
+		<form method="post" class="row g-4 pt-4">
+			<div class="form-group col-12">
+				<label for="employeeName" class="form-label">Employee Name</label>
+				<input type="text" name="employeeName" class="form-control text-primary fw-semibold" th:value="${overtime.employee.name}" disabled>
+			</div>
+			<div class="form-group col-12">
+				<label for="overtimeStatus" class="form-label">Claim Status</label>
+				<input type="text" name="overtimeStatus" class="form-control text-primary fw-semibold" th:value=${overtime.status} disabled>
+			</div>
+			<div class="form-group col-md-6 pe-2">
+				<label for="startDate" class="form-label">Start Time</label>
+				<input type="text" class="form-control" name="startTime" th:value="${#temporals.format(overtime.startTime, 'yyyy-MM-dd HH:mm')}" disabled/>				
+			</div>
+			<div class="form-group col-md-6">
+				<label for="endDate" class="form-label">End Time</label>
+				<input type="text" class="form-control" name="endTime" th:value="${#temporals.format(overtime.endTime, 'yyyy-MM-dd HH:mm')}" disabled/>				
+			</div>
+			</div>
+			<div class="form-group col-12">
+    			<label for="reason" class="form-label">Reason</label>
+    			<textarea class="form-control" name="reason" th:text=${overtime.reason} disabled></textarea>
+			</div>
+			<div class="form-group col-12">
+				<label for="contact" class="form-label">Manager Comment</label>
+				<textarea name="managerComment" class="form-control" th:text="${overtime.managerComment}"></textarea>
+			</div>
+  			<div class="d-flex flex-row-reverse">
+				<button class="btn btn-success ms-3" type="submit"
+					th:if="${#strings.equals(overtime.status,'APPLIED') or #strings.equals(overtime.status,'UPDATED')}" 
+					th:formaction="@{~/manager/staff/}+${overtime.employee.id}+${'/overtime/'}+${overtime.id}+${'/approve'}">Approve</button>
+				<button class="btn btn-danger ms-3" type="submit"
+					th:if="${#strings.equals(overtime.status,'APPLIED') or #strings.equals(overtime.status,'UPDATED')}" 
+					th:formaction="@{~/manager/staff/}+${overtime.employee.id}+${'/overtime/'}+${overtime.id}+${'/reject'}">Reject</button>
+				<span class="ms-3"><a class="btn btn-outline-dark text-decoration-none" th:href="@{~/manager/overview}">Back to Overview</a></span>
+			</div>
+		</form>
+	</main>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout.html :: html_head}" />
+
+<body>
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
+	<main>
+		<h1 class="display-5">Leave Overview</h1>
+		<div>
+			<div th:replace="~{fragments/layout.html :: leave_entitlement}" th:with="leaveEntitlement=${leaveEntitlement}" />
+			<div class="d-flex flex-row-reverse">
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/leave/apply}">Apply Leave</a></span>
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/overtime/apply}">Apply Overtime Claim</a></span>
+			</div>
+		</div>
+		<div class="pt-4"><hr></div>
+		<div>
+			<div class="pt-4">
+				<h5>Upcoming Leaves <span th:if="${#lists.size(leaveUpcoming) > 5}">(First 5)</span></h5>
+				<div th:if="${#lists.isEmpty(leaveUpcoming)}">
+					<p class="text-center">You do not have any upcoming leaves.</p>
+				</div>
+				<div th:if="${not #lists.isEmpty(leaveUpcoming)}">
+					<table class="table table-sm table-bordered border-light" width="100%">
+						<thead class="table-light border-light-subtle">
+							<tr>
+								<td>Leave Type</td>
+								<td>Start Date</td>
+								<td>End Date</td>
+								<td>Duration</td>
+								<td>Status</td>
+								<td>Actions</td>
+							</tr>
+						</thead>
+						<tr th:each="leave , iStat : ${leaveUpcoming}" th:if="${iStat.count <= 5}">
+							<td th:text="${leave.leaveType.type}"></td>
+							<td>
+								<span th:text="${leave.startDate}"></span>
+								<span th:text="${leave.startDaySection}"></span>
+							</td>
+							<td>
+								<span th:text="${leave.endDate}"></span>
+								<span th:text="${leave.endDaySection}"></span>
+							</td>
+							<td th:text="${leaveService.calculateDeductibleDaysInLeave(leave)} + ${' days'}"></td>
+							<td class="fw-normal" th:text="${leave.status}"
+								th:classappend="${ (leave.status.toString() == 'APPLIED' || leave.status.toString() == 'UPDATED') ? 'text-primary' : 
+												   (leave.status.toString() == 'APPROVED') ? 'text-success' :
+												   (leave.status.toString() == 'REJECTED') ? 'text-danger' : 'text-secondary'}"></td>
+							<td>
+								<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/staff/leave/details/}+${leave.id}">View</a></span>
+							</td>
+						</tr>									
+					</table>
+				</div>
+			</div>
+			<div class="d-flex flex-row-reverse">
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/leave/history}">View Leave History</a></span>
+			</div>
+		</div>
+		<div class="pt-4"><hr></div>
+		<div>
+			<div class="pt-4">
+				<h5>Overtime Claims<span th:if="${#lists.size(overtimeClaims) > 5}">(First 5)</span></h5>
+				<div th:if="${#lists.isEmpty(overtimeClaims)}">
+					<p class="text-center">You do not have any overtime claims.</p>
+				</div>
+				<div th:if="${not #lists.isEmpty(overtimeClaims)}">
+					<table class="table table-sm table-bordered border-light" width="100%">
+						<thead class="table-light border-light-subtle">
+							<tr>
+								<td>Start Time</td>
+								<td>End Time</td>
+								<td>Duration</td>
+								<td>Eligible Claim</td>
+								<td>Status</td>
+								<td>Action</td>
+							</tr>
+						</thead>
+						<tr th:each="overtime , iStat : ${overtimeClaims}" th:if="${iStat.count <= 5}">
+							<td>
+								<span th:text="${#temporals.format(overtime.startTime, 'yyyy-MM-dd HH:mm')}"></span>
+							</td>
+							<td>
+								<span th:text="${#temporals.format(overtime.endTime, 'yyyy-MM-dd HH:mm')}"></span>
+							</td>
+							<td>
+								<span th:text="${overtime.getDuration() + ' hours'}"></span>
+							</td>
+							<td>
+								<span th:text="${overtime.getClaimableCompensation() + ' days'}"></span>
+							</td>
+							<td class="fw-normal" th:text="${overtime.status}"
+								th:classappend="${ (overtime.status.toString() == 'APPLIED' || overtime.status.toString() == 'UPDATED') ? 'text-primary' : 
+												   (overtime.status.toString() == 'APPROVED') ? 'text-success' :
+												   (overtime.status.toString() == 'REJECTED') ? 'text-danger' : 'text-secondary'}"></td>
+							<td>
+								<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/staff/overtime/details/}+${overtime.id}">View</a></span>
+							</td>
+						</tr>									
+					</table>
+				</div>
+			</div>
+			<div class="d-flex flex-row-reverse">
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/overtime/history}">View Overtime History</a></span>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

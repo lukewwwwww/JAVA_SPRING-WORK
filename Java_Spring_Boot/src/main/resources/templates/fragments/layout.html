@@ -1,0 +1,187 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="html_head" id="html_head">
+	<meta charset="UTF-8">
+	<title>Leave Management System</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+		crossorigin="anonymous"></script>
+	<link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+
+<body>
+	<div th:fragment="topbar" id="topbar">
+		<nav class="navbar navbar-dark bg-dark">
+			<div class="container-fluid">
+				<a class="navbar-brand logo-font" href="#">Leave Management System</a>
+			</div>
+		</nav>
+	</div>
+	
+	<div th:fragment="offcanvas_nav" id="nav">
+		<!--https://getbootstrap.com/docs/5.3/components/navbar/#offcanvas-->
+		<nav class="navbar navbar-dark bg-dark">
+			<div class="container-fluid">
+				<a class="navbar-brand logo-font" href="/">Leave Management System</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+					data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+					aria-labelledby="offcanvasDarkNavbarLabel">
+					<div class="offcanvas-header">
+						<h5 class="offcanvas-title logo-font" id="offcanvasDarkNavbarLabel">Welcome, <span th:text="${#ctx.session.employee.name}"></span></h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+							aria-label="Close"></button>
+					</div>
+					<div class="offcanvas-subheader">
+						<div class="offcanvas-image-container mx-auto d-block">
+							<image class="offcanvas-profile-image" th:src="@{/image/1.png}"></image>	
+						</div>
+					</div>
+					<div class="offcanvas-body">
+						<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+							<li class="nav-item">
+								<a class="nav-link active" aria-current="page" href="/">Home</a>
+							</li>
+							<div id="nav-admin">
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										Administrator
+									</a>
+									<ul class="dropdown-menu dropdown-menu-dark">
+										<li><a class="dropdown-item" href="#">Overview</a></li>
+										<li><a class="dropdown-item" href="#">Manage Accounts</a></li>
+										<li><a class="dropdown-item" href="#">Manage Staff</a></li>
+										<li><a class="dropdown-item" href="#">Manage Calendar</a></li>
+										<li><a class="dropdown-item" href="#">Manage Leaves</a></li>
+									</ul>
+								</li>
+							</div>
+							<div id="nav-manager">
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										Manager
+									</a>
+									<ul class="dropdown-menu dropdown-menu-dark">
+										<li><a class="dropdown-item" href="/manager/overview">Overview</a></li>
+										<li><a class="dropdown-item" href="/manager/staff">View Subordinate List</a></li>
+										<li><a class="dropdown-item" href="/manager/leave/pending">View Pending Leaves</a></li>
+										<li><a class="dropdown-item" href="/manager/overtime/pending">View Pending Overtime Claims</a></li>
+									</ul>
+								</li>
+							</div>
+							<div id="nav-personal">
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										Personal
+									</a>
+									<ul class="dropdown-menu dropdown-menu-dark">
+										<li><a class="dropdown-item" href="/staff/overview">Overview</a></li>
+										<li><a class="dropdown-item" href="/staff/leave/apply">Apply Leave</a></li>
+										<li><a class="dropdown-item" href="/staff/overtime/apply">Apply Overtime Claim</a></li>
+										<li><a class="dropdown-item" href="/staff/leave/history">View Leave History</a></li>
+										<li><a class="dropdown-item" href="/staff/overtime/history">View Overtime History</a></li>
+									</ul>
+								</li>
+							</div>
+							<li class="nav-item">
+								<a class="nav-link" href="/logout">Logout</a>
+							</li>
+						</ul>
+					</div>
+					<div class="offcanvas-footer ">
+						<span class="opacity-50">&#169; GDipSA57 - Team 7</span>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</div>
+	
+	<div th:fragment="leave_entitlement" id="leave_entitlement">
+		<div class="pt-4">
+			<h5>Current Leave Balance</h5>
+			<table class="table table-sm table-bordered border-light" width="100%">
+				<thead class="table-light border-light-subtle">
+					<tr>
+						<td></td>
+						<td th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.leaveType.type}"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="table-light border-light-subtle">Leave Balance</td>
+						<td th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.leaveBalance}"></td>
+					</tr>
+					<tr>
+						<td class="table-light border-light-subtle">Leave Entitlement</td>
+						<td th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.entitlement}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<div th:fragment="leave_balance" id="leave_balance">
+		<div class="pt-4">
+			<table class="table table-sm table-bordered border-light" width="100%">
+				<thead class="table-light border-light-subtle">
+					<tr>
+						<td></td>
+						<td th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.leaveType.type}"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="table-light border-light-subtle">Leave Balance</td>
+						<td th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.leaveBalance}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- Requires params currUrl, pageSize, currPage, totalPages --> 
+	<div th:fragment="pagination-bar" id="pagination-bar">
+		<div class="row col-12 pt-4 pb-4">
+			<div class="col-8">
+				<ul th:if="${totalPages > 1}" class="pagination pagination-sm mb-0">
+					<li class="page-item" th:classappend="${currPage == 1} ? disabled : ''">
+						<a class="page-link" th:href="@{'' + ${currUrl} + '?page=1' + '&size=' + ${pageSize}}">First</a>
+					</li>
+					<li class="page-item" th:classappend="${currPage <= 1} ? disabled : ''">
+						<a class="page-link"
+							th:href="@{'' + ${currUrl} + '?page=' + ${currPage  - 1} + '&size=' + ${pageSize}}">Previous</a>
+					</li>
+					<li th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"
+						th:classappend="${currPage == i} ? active : ''">
+						<a class="page-link"
+							th:href="@{'' + ${currUrl} + '?page=' + ${i} + '&size=' + ${pageSize}}">[[${i}]]</a>
+					</li>
+					<li class="page-item" th:classappend="${currPage >= totalPages} ? disabled : ''">
+						<a class="page-link"
+							th:href="@{'' + ${currUrl} + '?page=' + ${currPage  + 1} + '&size=' + ${pageSize}}">Next</a>
+					</li>
+					<li class="page-item" th:classappend="${currPage == totalPages} ? disabled : ''">
+						<a class="page-link"
+							th:href="@{'' + ${currUrl} + '?page=' + ${totalPages} + '&size=' + ${pageSize}}">Last</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-2 pe-0 text-end" style="font-size:0.9rem; align-self:center;">Items per Page:</div>
+			<div class="col-2 pe-0">
+				<select class="form-select form-select-sm" name="pageSize" th:value="${pageSize}"
+					onchange="self.location.href=options[selectedIndex].value">
+					<option th:selected="${pageSize}==5" th:value="${currUrl}+'?page=1'+'&size=5'">5</option>
+					<option th:selected="${pageSize}==10" th:value="${currUrl}+'?page=1'+'&size=10'">10</option>
+					<option th:selected="${pageSize}==25" th:value="${currUrl}+'?page=1'+'&size=25'">25</option>
+					<option th:selected="${pageSize}==50" th:value="${currUrl}+'?page=1'+'&size=50'">50</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+</body>

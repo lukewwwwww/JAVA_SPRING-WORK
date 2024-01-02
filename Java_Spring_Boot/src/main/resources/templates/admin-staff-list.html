@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout.html :: html_head}" />
+<body>
+    <div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
+    <main>
+        <h1 class="display-5">Staff List</h1>
+        <div class="pt-4">
+            <div th:replace="~{fragments/layout.html :: pagination-bar}" />
+
+            <div th:if="${#lists.isEmpty(staffList)}">
+                <p class="text-center">No Staff.</p>
+            </div>
+
+            <div th:if="${not #lists.isEmpty(staffList)}">
+                <table class="table table-sm table-bordered border-light" width="100%">
+                    <thead class="table-light border-light-subtle">
+                        <tr>
+                            <td>Staff Id</td>
+                            <td>Name</td>
+                            <td>Job</td>
+                            <td>Join Date</td>
+                            <td>Manager Id</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="Employee : ${staffList}">
+                            <td th:text="${Employee.staffId}">Staff Id</td>
+                            <td th:text="${Employee.name}">Name</td>
+                            <td th:text="${Employee.job}">Job</td>
+                            <td th:text="${Employee.joinDate}">Join Date</td>
+                            <td th:text="${Employee.managerId}">Manager Id</td>
+                            <td>
+                                <span>
+                                    <a class="btn btn-sm btn-outline-primary" th:href="@{'~/staff/'} + ${Employee.id}">View</a>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

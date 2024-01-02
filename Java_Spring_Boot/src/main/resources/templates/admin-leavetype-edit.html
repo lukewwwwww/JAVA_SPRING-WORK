@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Leave Type</title>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Edit Leave Type</h2>
+    <form th:action="@{/leavetype/{id}/edit(id=${leaveType.id})}" th:object="${leaveType}" method="post">
+        <div class="form-group">
+            <label for="type">Type:</label>
+            <input type="text" id="type" th:field="*{type}" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success">Update</button>
+    </form>
+</div>
+</body>
+</html>
